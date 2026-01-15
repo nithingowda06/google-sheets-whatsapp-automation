@@ -1,0 +1,375 @@
+{
+  "name": "Google Sheets to WhatsApp Integration",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1oSY4pXIUFISrrc19qcfy9z3D_YikHtKI0n8uoraseYw",
+          "mode": "list",
+          "cachedResultName": "Google Sheets to WhatsApp",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oSY4pXIUFISrrc19qcfy9z3D_YikHtKI0n8uoraseYw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oSY4pXIUFISrrc19qcfy9z3D_YikHtKI0n8uoraseYw/edit#gid=0"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "id": "d9f54b02-6b28-463e-a016-40a41a0f56ad",
+      "name": "When Row Added",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        384,
+        1696
+      ],
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "yHo5Kig8P4J2Mhl2",
+          "name": "Google Sheets Trigger account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-2",
+              "name": "Timestamp",
+              "value": "={{ $json.date_created }}",
+              "type": "string"
+            },
+            {
+              "id": "id-3",
+              "name": "Phone_Number",
+              "value": "={{ $json.to.replace('whatsapp:', '') }}",
+              "type": "string"
+            },
+            {
+              "id": "id-4",
+              "name": "Message Status",
+              "value": "Sent",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "1e631a4e-8515-4a13-94aa-589a39bcc49c",
+      "name": "Prepare Success Status",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1056,
+        1792
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-2",
+              "name": "Timestamp",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "id-3",
+              "name": "Phone_Number",
+              "value": "={{ $('Send WhatsApp via Twilio').item.json.to.replace('whatsapp:', '') }}",
+              "type": "string"
+            },
+            {
+              "id": "id-4",
+              "name": "Message Status",
+              "value": "Failed",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "1b95365f-8ab6-4ecb-a0e7-742c3d975e3f",
+      "name": "Prepare Failed Status",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1056,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1oSY4pXIUFISrrc19qcfy9z3D_YikHtKI0n8uoraseYw",
+          "mode": "list",
+          "cachedResultName": "Google Sheets to WhatsApp",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oSY4pXIUFISrrc19qcfy9z3D_YikHtKI0n8uoraseYw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oSY4pXIUFISrrc19qcfy9z3D_YikHtKI0n8uoraseYw/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Phone_Number": "={{ $json.Phone_Number }}",
+            "Status": "={{ $json['Message Status'] || 'Sent' }}",
+            "Timestamp": "={{ $json.Timestamp }}"
+          },
+          "matchingColumns": [
+            "Phone_Number"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Phone_Number",
+              "displayName": "Phone_Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "11baea9b-7398-4174-ba49-bf8341565eaf",
+      "name": "Update Sheet Row",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1280,
+        1696
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "hQklfd6yT1DtJgMi",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $json.error }}",
+              "operator": {
+                "type": "string",
+                "operation": "empty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b0ff400b-4a18-426e-bbf2-b33b2d57f8e3",
+      "name": "Check Send Status",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        832,
+        1696
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.twilio.com/2010-04-01/Accounts/ACfb31668d90c5f5acba06944d738988c2/Messages.json\n",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "From",
+              "value": "whatsapp:+14155238886"
+            },
+            {
+              "name": "To",
+              "value": "=whatsapp:{{ $('When Row Added').item.json['Phone_Number'] }}"
+            },
+            {
+              "name": "Body",
+              "value": "={{ $('When Row Added').item.json['Message'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "aed466ad-1c99-4f41-8173-252a002ed422",
+      "name": "Send WhatsApp via Twilio",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        608,
+        1696
+      ],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "PLfrd5Ci7UoUOdEF",
+          "name": "Unnamed credential"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Prepare Success Status": {
+      "main": [
+        [
+          {
+            "node": "Update Sheet Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Send Status": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Failed Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Failed Status": {
+      "main": [
+        [
+          {
+            "node": "Update Sheet Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Row Added": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp via Twilio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WhatsApp via Twilio": {
+      "main": [
+        [
+          {
+            "node": "Check Send Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "feb3ca5f-741c-438c-8e09-a69c7bc7b766",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3a4b4e654aead79d2d09255e2ececbc66d1ecf677f1d9737489f1cc2897a8e2b"
+  },
+  "id": "kHANvrVs0QKElMA9",
+  "tags": []
+}
