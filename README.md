@@ -55,7 +55,10 @@ Append Reply to Google Sheet
 
 yaml
 Copy code
+---
+## 🖼 Workflow Overview
 
+![n8n Workflow](Workflow.png)
 ---
 
 ## 📄 Google Sheet Structure
