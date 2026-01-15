@@ -58,7 +58,7 @@ Copy code
 ---
 ## 🖼 Workflow Overview
 
-![n8n Workflow](Workflow.png)
+![n8n Workflow](workflow.png)
 ---
 
 ## 📄 Google Sheet Structure
