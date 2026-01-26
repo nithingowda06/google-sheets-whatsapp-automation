@@ -1,41 +1,50 @@
-# Google Sheets ↔ WhatsApp Automation
+# 📲 Google Sheets ↔ WhatsApp Automation
 
-Automate WhatsApp messaging using Google Sheets with two-way synchronization powered by **Twilio**, **n8n**, and **Google Sheets**.
-
----
-
-## 🚀 Overview
-
-This project enables:
-- 📤 Sending WhatsApp messages when a new row is added to Google Sheets
-- 📥 Receiving WhatsApp replies and storing them back in Google Sheets
-- 🔄 Updating message **Status** and **Timestamp** automatically
-- 🧩 Scalable, production-ready automation using Twilio (official WhatsApp API)
+Automate two-way WhatsApp communication using **Google Sheets**, **Twilio**, and **n8n**.  
+This system transforms a spreadsheet into a **live WhatsApp messaging dashboard**.
 
 ---
 
-## ✨ Features
+## 🚀 Project Overview
 
-- Google Sheets → WhatsApp (auto-send on new row)
-- WhatsApp → Google Sheets (store incoming messages)
-- Message status tracking (Sent / Failed)
-- Timestamp logging
-- Phone-number based row matching
-- Built using official APIs (no risk of bans)
+This automation enables:
+
+- 📤 Sending WhatsApp messages automatically when a new row is added in Google Sheets  
+- 📥 Receiving WhatsApp replies and storing them back in the sheet  
+- 🔄 Tracking message delivery status (Sent / Failed)  
+- 🕒 Automatic timestamp logging  
+- 🔎 Matching replies to users using phone numbers  
+
+It works like a **mini WhatsApp CRM system** built with automation tools.
+
+---
+
+## ✨ Core Features
+
+- Google Sheets → WhatsApp auto messaging  
+- WhatsApp → Google Sheets reply tracking  
+- Real-time message status updates  
+- Timestamp logging  
+- Phone-number based user matching  
+- Built using **official Twilio WhatsApp API** (secure & scalable)  
+- Two-way communication automation  
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Twilio WhatsApp API**
-- **n8n** (workflow automation)
-- **Google Sheets**
-- **HTTP Request (Twilio API)**
-- *(Optional)* Google Apps Script, Slack
+| Tool | Purpose |
+|------|---------|
+| **Twilio WhatsApp API** | Sending & receiving WhatsApp messages |
+| **n8n** | Workflow automation |
+| **Google Sheets API** | Data storage and tracking |
+| **HTTP Requests** | Twilio API communication |
 
 ---
 
-## 🔄 High-Level Workflow
+## 🔄 System Workflow
+
+### 📤 Outgoing Messages
 
 Google Sheets (New Row)
 ↓
@@ -43,104 +52,131 @@ n8n Trigger
 ↓
 Send WhatsApp Message (Twilio API)
 ↓
+Check Send Status
+↓
 Update Google Sheet (Status + Timestamp)
 
-Incoming WhatsApp Reply
+
+### 📥 Incoming Messages
+
+WhatsApp User Reply
 ↓
 Twilio Webhook
 ↓
-n8n Webhook
+n8n Webhook Trigger
 ↓
-Append Reply to Google Sheet
+Extract Reply Data
+↓
+Match Phone Number
+↓
+Update Google Sheet with Reply
 
-yaml
-Copy code
+
 ---
-## 🖼 Workflow Overview
 
-![n8n Workflow](workflow.png)
+## 🖼 Workflow Diagram
+
+![Workflow Overview](workflow.png)
+
 ---
 
 ## 📄 Google Sheet Structure
 
-| Column | Name         | Description                          |
-|------|--------------|--------------------------------------|
-| A    | Name         | Recipient name                       |
-| B    | Phone_Number | WhatsApp number (+CountryCode)       |
-| C    | Message      | Message to send                      |
-| D    | Status       | Sent / Failed                        |
-| E    | Timestamp    | Auto-filled                          |
+| Column | Field Name    | Description |
+|--------|--------------|-------------|
+| A | Name | Recipient name |
+| B | Phone_Number | WhatsApp number with country code |
+| C | Message | Message to send |
+| D | Status | Sent / Failed |
+| E | Timestamp | Auto-filled send time |
+| F | Reply_Message | User reply text |
+| G | Reply_Time | Time of incoming message |
 
-📌 Phone numbers **must include country code** (example: `+918050823618`)
+📌 Phone numbers **must include country code**  
+Example: `+918050823618`
 
 ---
 
-## ⚙️ Setup Instructions
+## ⚙️ Setup Guide
 
 ### 1️⃣ Twilio Setup
-- Create a Twilio account
-- Enable WhatsApp Sandbox (for testing)
-- Send `join <sandbox-code>` to `+1 415 523 8886`
-- Get **Account SID** and **Auth Token**
+
+1. Create a Twilio account  
+2. Activate **WhatsApp Sandbox** (for testing)  
+3. Send:  
+join <sandbox-code>
+
+to:
++1 415 523 8886
+
+4. Copy your:
+- Account SID  
+- Auth Token  
 
 ---
 
 ### 2️⃣ n8n Setup
-- Import the workflow JSON
-- Add credentials:
-  - Google Sheets
-  - Twilio (used in HTTP Request Basic Auth)
-- Activate the workflow
+
+1. Import the workflow JSON  
+2. Add credentials:
+- Google Sheets  
+- Twilio (via HTTP Request Basic Auth)  
+3. Activate the workflow  
 
 ---
 
-### 3️⃣ WhatsApp Send (HTTP Request)
+### 3️⃣ WhatsApp Send Configuration
+
+**HTTP Request Settings**
+
 - Method: `POST`
 - URL:
 https://api.twilio.com/2010-04-01/Accounts/{ACCOUNT_SID}/Messages.json
 
-yaml
-Copy code
-- Body (Form URL Encoded):
-- From: `whatsapp:+14155238886`
-- To: `whatsapp:+91XXXXXXXXXX`
-- Body: message text
+
+**Body (Form URL Encoded):**
+
+| Field | Value |
+|------|------|
+| From | `whatsapp:+14155238886` |
+| To | `whatsapp:+91XXXXXXXXXX` |
+| Body | Message text |
 
 ---
 
-## 📥 Incoming WhatsApp Messages
+## 📥 Incoming WhatsApp Setup
 
-- Use Twilio **Webhook** → n8n **Webhook Trigger**
-- Extract:
-- Sender number
-- Message body
-- Timestamp
-- Append to Google Sheet
-
----
-
-## 💰 Pricing (Important)
-
-- ❌ No lifetime free WhatsApp
-- ✅ Twilio is **pay-as-you-go**
-- Charged per WhatsApp conversation (Meta pricing applies)
-- Suitable for long-term business use
+- Configure Twilio Webhook → n8n Webhook URL  
+- Extract from webhook:
+  - Sender number  
+  - Message body  
+  - Timestamp  
+- Update matching row in Google Sheet  
 
 ---
 
-## 📌 Notes & Best Practices
+## 💰 Pricing Notes
 
-- Workflow triggers **only on new rows**, not edits
-- Avoid using phone numbers without country code
-- Sandbox requires each number to join once
-- For production, move to **Twilio WhatsApp Business (paid)**
+- ❌ No lifetime free WhatsApp API  
+- ✅ Twilio is **pay-as-you-go**  
+- Charges are based on WhatsApp conversation pricing (Meta rates)  
+- Suitable for production-grade systems  
+
+---
+
+## 📌 Best Practices
+
+- Workflow triggers only on **new rows**, not edits  
+- Always use phone numbers with country codes  
+- Sandbox users must join once before messaging  
+- For production, use **Twilio WhatsApp Business API**
 
 ---
 
 ## 👤 Author
 
 **Nithin**  
-Automation | Backend | WhatsApp Integrations
+Automation | Backend | WhatsApp Integrations  
 
 ---
 
