@@ -79,6 +79,8 @@ Update Google Sheet with Reply
 ![Workflow Overview](workflow.png)
 
 ---
+![Workflow Overview](2.png)
+---
 
 ## 📄 Google Sheet Structure
 
